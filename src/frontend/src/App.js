@@ -18,6 +18,10 @@ import {
 import './App.css';
 import Empty from "antd/es/empty";
 import Spin from "antd/lib/spin";
+import Button from "antd/es/button";
+import DownloadOutlined from "@ant-design/icons/lib/icons/DownloadOutlined";
+import PlusOutlined from "@ant-design/icons/lib/icons/PlusOutlined";
+import StudentDrawerForm from "./StudentDrawerForm";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -51,6 +55,7 @@ function App() {
     const [students, setStudents] = useState([]);
     const [collapsed, setCollapsed] = useState(false);
     const [fetching, setFetching] = useState(true);
+    const [showDrawer, setShowDrawer] = useState(false);
 
     const fetchStudents = () =>
         getAllStudents()
@@ -73,15 +78,28 @@ function App() {
         if (students.length <= 0) {
             return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
         }
-        return <Table
-            dataSource={students}
-            columns={columns}
-            bordered
-            title={() => 'Students'}
-            pagination={{ pageSize: 50 }}
-            scroll={{ y:1000 }}
-            rowKey={(student) => student.id}
-        />;
+        return <>
+            <StudentDrawerForm
+                showDrawer={showDrawer}
+                setShowDrawer={setShowDrawer}
+                fetchStudents={fetchStudents}
+            />
+            <Table
+                dataSource={students}
+                columns={columns}
+                bordered
+                title={() =>
+                    <Button
+                        onClick={() => setShowDrawer(!showDrawer)}
+                            type="primary" shape="round" icon={<PlusOutlined />} size="small">
+                        Add Student
+                    </Button>
+                }
+                pagination={{ pageSize: 50 }}
+                scroll={{ y:1000 }}
+                rowKey={(student) => student.id}
+            />;
+        </>
     }
 
     return <Layout style={{ minHeight: '100vh' }}>
