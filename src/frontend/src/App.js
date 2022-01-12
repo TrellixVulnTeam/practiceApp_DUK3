@@ -22,11 +22,33 @@ import Button from "antd/es/button";
 import DownloadOutlined from "@ant-design/icons/lib/icons/DownloadOutlined";
 import PlusOutlined from "@ant-design/icons/lib/icons/PlusOutlined";
 import StudentDrawerForm from "./StudentDrawerForm";
+import Badge from "antd/es/badge";
+import Tag from "antd/es/tag";
+import Avatar from "antd/es/avatar";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
+const TheAvatar = ({name}) => {
+    let trim = name.trim();
+    if (trim.length === 0) {
+        return <Avatar icon={<UserOutlined/>}/>
+    }
+    const split = trim.split(" ");
+    if (split.length === 1) {
+        return <Avatar>{name.charAt(0)}</Avatar>
+    }
+    return <Avatar>{`${name.charAt(0)}${split[1].charAt(0)}`}</Avatar>
+}
+
 const columns = [
+    {
+        title: '',
+        dataIndex: 'avatar',
+        key: 'avatar',
+        render: (text, student) =>
+            <TheAvatar name={student.name}/>
+    },
     {
         title: 'Id',
         dataIndex: 'id',
@@ -89,16 +111,21 @@ function App() {
                 columns={columns}
                 bordered
                 title={() =>
-                    <Button
-                        onClick={() => setShowDrawer(!showDrawer)}
+                    <>
+                        <Tag style={{marginBottom: "10px"}}>Total Student Count :</Tag>
+                        <Badge count={true ? 4 : 0} className="site-badge-count-4" />
+                        <br/>
+                        <Button
+                            onClick={() => setShowDrawer(!showDrawer)}
                             type="primary" shape="round" icon={<PlusOutlined />} size="small">
-                        Add Student
-                    </Button>
+                            Add Student
+                        </Button>
+                    </>
                 }
                 pagination={{ pageSize: 50 }}
                 scroll={{ y:1000 }}
                 rowKey={(student) => student.id}
-            />;
+            />
         </>
     }
 

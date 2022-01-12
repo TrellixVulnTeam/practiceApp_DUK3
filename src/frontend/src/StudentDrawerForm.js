@@ -7,6 +7,7 @@ import Col from "antd/es/grid/col";
 import { addNewStudent} from "./client";
 import Spin from "antd/lib/spin";
 import {LoadingOutlined} from "@ant-design/icons";
+import {errorNotification, successNotification} from "./Notification";
 
 const {Option} = Select;
 
@@ -22,9 +23,17 @@ function StudentDrawerForm({showDrawer, setShowDrawer, fetchStudents}) {
             .then(() => {
                 console.log("student added")
                 onClose();
+                successNotification(
+                    "Success",
+                    `${student.name} was added to record`
+                );
                 fetchStudents();
             }).catch(err => {
                 console.log(err)
+                errorNotification(
+                    "Error",
+                    `${err}`
+                );
             }).finally(() => setSubmitting(false))
     };
 
